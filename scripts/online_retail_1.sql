@@ -117,7 +117,7 @@ JOIN OrderItems oi ON o.OrderID=oi.OrderID
 JOIN Products p ON oi.ProductID=p.ProductID
 WHERE o.CustomerID=1;
 
-s
+
 --Find the total sales for each product
 SELECT p.ProductID,p.ProductName,SUM(oi.Quantity * oi.Price) AS 'Total Sales'
 FROM OrderItems oi
@@ -139,7 +139,7 @@ ROW_NUMBER() OVER (ORDER BY SUM(o.TotalAmount)DESC) AS rn
 FROM Customers c
 JOIN Orders o
 ON c.CustomerID = o.CustomerID
-GROUP BY c.CustomerID,c.FirstName,c.LastName)s
+GROUP BY c.CustomerID,c.FirstName,c.LastName)
 sub WHERE rn <=5;
 
 
