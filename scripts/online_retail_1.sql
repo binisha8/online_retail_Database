@@ -223,3 +223,108 @@ FROM OrderItems o
 JOIN Products p ON p.ProductID=o.ProductID 
 GROUP BY p.productID,p.ProductName
 ORDER BY p.ProductName;
+
+
+
+--Calculate the total revenue generated from each category
+SELECT  c.CategoryID,c.CategoryName,SUM(oi.Quantity*oi.Price) AS TotalRevenue
+FROM OrderItems oi JOIN Products p
+ON oi.ProductID=p.ProductID
+JOIN Categories c
+ON c.CategoryID=p.CategoryID
+GROUP BY c.CategoryID,c.CategoryName
+ORDER BY TotalRevenue DESC
+
+
+--Find the highest priced  product in each category
+SELECT c.CategoryID,c.CategoryName,p1.ProductID,p1.ProductName,p1.Price
+FROM Categories c 
+JOIN Products p1 ON  c.CategoryID=p1.CategoryID
+WHERE p1.Price =(SELECT MAX(Price) FROM Products p2 where p2.CategoryID=p1.CategoryID)
+ORDER BY p1.Price DESC;
+
+--Retrive orders with a total amount greater than a specific value (e.g. $500)
+SELECT o.OrderID,c.CustomerID,c.FirstName,c.LastName,o.TotalAmount
+FROM Orders o 
+JOIN Customers c
+ON o.CustomerID=c.CustomerID
+WHERE o.TotalAmount>=500
+ORDER BY o.TotalAmount DESC
+
+
+--List products along with the number of order they appear in
+SELECT p.ProductID,p.ProductName,COUNT(oi.OrderID) AS OrderCount
+FROM Products p JOIN OrderItems oi
+ON p.ProductID=oi.ProductID
+GROUP BY p.ProductID,p.ProductName
+ORDER BY OrderCount DESC;
+
+
+
+--Find the top 3 most frequently ordered products
+SELECT TOP 3 p.ProductID,p.ProductName,COUNT(oi.OrderID) AS OrderCount
+FROM Products p JOIN OrderItems oi
+ON p.ProductID=oi.ProductID
+GROUP BY p.ProductID,p.ProductName;
+
+
+
+--Calculate the total number of customers from each country
+SELECT Country,COUNT(CustomerID) AS TotalCustomers
+FROM Customers
+GROUP BY Country
+
+
+--Retrive the list of customers along with their total spending
+SELECT c.CustomerID,c.FirstName,c.LastName,SUM(o.TotalAmount) AS TotalSpending
+FROM Customers c
+JOIN Orders o
+ON c.CustomerID=o.CustomerID
+GROUP BY c.CustomerID,c.FirstName,c.LastName;
+
+
+--List orders with more than a specified number of items(e.g. 5 items)
+ SELECT o.OrderID,c.CustomerID,c.FirstName,c.LastName,COUNT(oi.OrderItemID) AS NumberofItems
+ FROM Orders o 
+ JOIN OrderItems oi
+ ON o.OrderID=oi.OrderID
+ JOIN Customers c
+ ON o.CustomerID=c.CustomerID
+ GROUP BY o.OrderID ,c.CustomerID,c.FirstName,c.LastName
+ HAVING COUNT(oi.OrderItemID)>5
+ ORDER BY NumberofItems;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
